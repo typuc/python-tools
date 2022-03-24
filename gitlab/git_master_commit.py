@@ -37,7 +37,6 @@ def branche_count(project):
     print(start_date, end_date, branch)
     commits = project.commits.list(ref_name="master", since=str(start_date) + 'T00:00:00.000+08:00',
                                    until=str(end_date) + 'T00:00:00.000+08:00', page=0, per_page=100000)
-    # print(commits)
     n = 0
     a = 0
     for c in commits:
@@ -63,8 +62,6 @@ def branche_count(project):
 if __name__ == '__main__':
     ##api https://python-gitlab.readthedocs.io/en/1.3.0/api-usage.html
     # url = "http://192.168.16.213:9205"
-    url = "http://117.50.20.66:29200/"
-    
     gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.config')
 
     for a in gl.projects.list(all=True, order_by='name'):
@@ -78,6 +75,4 @@ if __name__ == '__main__':
                 print('*' * 30)
                 print('项目{} 未找到!'.format(a.path_with_namespace))
             pass
-    # project = gl.projects.get('haixue-crm/label-service-api')
-    # #print(project)
-    # branche_count(project)
+

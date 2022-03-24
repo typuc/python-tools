@@ -24,7 +24,7 @@ if __name__ == '__main__':
     gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.config')
     # 根据项目名字进行查找
     n = 0
-    with open('../git_list.txt', 'r') as f:
+    with open('../config/git_list.txt', 'r') as f:
         for i in f:
             team_project = i.strip('\n')
             try:

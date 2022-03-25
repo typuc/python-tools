@@ -21,7 +21,7 @@ def get_all_delete_branche(project):
 
 if __name__ == '__main__':
     ##api https://python-gitlab.readthedocs.io/en/1.3.0/api-usage.html
-    gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.config')
+    gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.cfg')
     # 根据项目名字进行查找
     n = 0
     with open('../config/git_list.txt', 'r') as f:

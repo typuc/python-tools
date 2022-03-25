@@ -62,7 +62,7 @@ def branche_count(project):
 if __name__ == '__main__':
     ##api https://python-gitlab.readthedocs.io/en/1.3.0/api-usage.html
     # url = "http://192.168.16.213:9205"
-    gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.config')
+    gl = gitlab.Gitlab.from_config('prod', '../config/gitlab.cfg')
 
     for a in gl.projects.list(all=True, order_by='name'):
         print(a.path_with_namespace)

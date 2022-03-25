@@ -146,8 +146,7 @@ def out_pic():
 if __name__ == '__main__':
     workPath = os.getcwd()
     os.chdir(workPath)
-    # url = "http://192.168.16.213:9205/"
-    url = "http://117.50.20.66:29200/"
+    url = "http://192.168.16.213:9205/"
     # inputDate = sys.argv[1]
     #indexBusiness = sys.argv[2]
     inputDate = "2020-10-15"
@@ -163,24 +162,3 @@ if __name__ == '__main__':
             indexName = 'nginx_access_{}_{}'.format(indexBusiness, indexDateLastDay)
         es = ESsearch(indexName=indexName, business=indexBusiness, indexDate=inputDate, startTime=searchHour,
                       endTime=searchHour)
-        # print('{} {} : {} app avaliable {}'.format(indexBusiness, indexDate, searchHour, es))
-    # x = []
-    # y = []
-    # for i in range(0, 24, 2):
-    #     start_hour = str(i).rjust(2, '0')
-    #     end_hour = str(i + 1).rjust(2, '0')
-    #     indexName = 'nginx_access_ops_{}'.format(indexDate)
-    #     search_date = inputDate
-    #     if i < 8:
-    #          indexName = 'nginx_access_ops_{}'.format(indexDateLastDay)
-    #          #search_date = "2020-10-14"
-    #
-    #          #print(indexName, start_hour, end_hour, inputDate)
-    #     t = (ESsearch_tp(indexName,start_hour,end_hour,search_date))
-    #     x.append(search_date + " " + end_hour)
-    #     y.append(t)
-    # plt.plot(x, y)
-    # plt.xlabel("date")
-    # plt.ylabel("TP99(s)")
-    # plt.xticks(rotation=50)
-    # plt.show()

@@ -16,7 +16,7 @@ with open(r'/tmp/export_result.csv', 'r', encoding='utf-8') as myFile:
         r.append(m)
         mylist.append(r)
 
-with open("tmp/out.csv", 'w', encoding='UTF8',newline='') as w:
+with open("../tmp/out.csv", 'w', encoding='UTF8', newline='') as w:
     #newline=''避免写入空行
     #创建CSV写入器
     writer = csv.writer(w)

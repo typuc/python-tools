@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl.utils import get_column_letter, column_index_from_string
 from openpyxl.styles import PatternFill
 wb = openpyxl.load_workbook("/Users/leo/Desktop/th.xlsx")
-
+COUNTIFS(B2:B11,">60",B2:B11,"<70")
 # https://openpyxl.readthedocs.io/en/stable/tutorial.html#
 # https://zhuanlan.zhihu.com/p/259583430
 my_sheet = wb['test']

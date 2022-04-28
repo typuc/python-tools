@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 ##调用pinpoint,获取jvm,mem内存使用
 import json
-import sys
 import requests
 import time
 import datetime
+import logging
 
 
 # 获取所有应用列表
@@ -13,7 +13,7 @@ def get_applications(http_host):
     applicationListUrl = http_host + '/applications.pinpoint'
     res = requests.get(applicationListUrl)
     if res.status_code != 200:
-        print("请求异常,请检查")
+        print("请求异常,请检查 {}".format(applicationListUrl))
         return
     return res.json()
 
@@ -123,34 +123,43 @@ def getAgentList(appname):
 
 if __name__ == "__main__":
     http_host = 'http://fizz-p.h.highso.com.cn'
-
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(filename)s %(levelname)s %(message)s',
+                        datefmt='%a, %d %b %Y %H:%M:%S',
+                        filename='logs/pinpoint.log_{}'.format(
+                            datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')),
+                        filemode='w')
+    datetime.datetime
     # 查询间隔单位秒
     # interval = int(sys.argv[1])
     interval = 86400
     end_time = int(time.time() * 1000)
     start_time = end_time - interval * 1000
-    app_name = "api-gateway"
-    agent_res = get_mem_gc('bj-ucloud-117-252-c-15410', '10.9.117.252', start_time, end_time)
-    print(agent_res)
+    # app_name = "app-cmdb-impl"
+    # print(list(getAgentList(app_name)))
+    # agent_res = get_mem_gc('bj-ucloud-37-97-c-15070', '10.9.37.97', start_time, end_time)
+    # print(agent_res)
+    #
     '''获取app名和服务类型，并存到字典中'''
-    # try:
-    #     applicationLists = get_applications(http_host)
-    #     for n in applicationLists:
-    #         # time.sleep(1)
-    #         app_name = n['applicationName']
-    #         # 查询结束时间
-    #         agent_list = list(getAgentList(app_name))
-    #         insert_time = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000+0800')
-    #         '''通过服务名获取服实例内存和部署节点IP'''
-    #         for k, v in getAgentList(app_name).items():
-    #             agent_res = get_mem_gc(k, v, start_time, end_time)
-    #             if agent_res:
-    #                 if agent_res:
-    #                     print(agent_res)
-    #                     # with open('tmp/pinpoint-mem-gc.log', 'a') as f:
-    #                     #     f.write(json.dumps(agent_res) + '\n')
-    # except e:
-    #     print(e)
+    try:
+        applicationLists = get_applications(http_host)
+        for n in applicationLists:
+            # time.sleep(1)
+            app_name = n['applicationName']
+            # 查询结束时间
+            agent_list = list(getAgentList(app_name))
+            insert_time = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000+0800')
+            '''通过服务名获取服实例内存和部署节点IP'''
+            for k, v in getAgentList(app_name).items():
+                agent_res = get_mem_gc(k, v, start_time, end_time)
+                logging.info("抓取 {} {} {} ".format(app_name, k, v))
+                if 'app_name' in agent_res.keys():
+                    with open('tmp/pinpoint-mem-gc.log', 'a') as f:
+                        f.write(json.dumps(agent_res) + '\n')
+                else:
+                    logging.error(" {} agentid {} on {} is down ".format(app_name, k, v))
+    except BaseException as err:
+        logging.error("error {} {}".format(app_name, err))
 
     # with open('s.txt','r') as t:
     #

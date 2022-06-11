@@ -3,13 +3,11 @@
 #
 import sys
 import io
-import os
 import jenkins
 from datetime import datetime
 import re
 from elasticsearch7 import Elasticsearch, ConnectionError
 import logging, logging.config
-import configparser
 from logging.handlers import RotatingFileHandler
 
 
@@ -49,7 +47,7 @@ def job_status(project):
                     job['result'] = 'SUCCESS'
 
             job['number'] = server.get_job_info(project)['lastCompletedBuild']['number']
-            logging.error("获取 {} 构建结果{} status {}".format(project,job['result'],job['number']))
+            logging.info("获取 {} 构建结果{} status {}".format(project,job['result'],job['number']))
     except Exception as e:
         print(e)
     return job
@@ -79,31 +77,29 @@ def write_es(es_restful, json_data):
     except:
         err_msg = ('Unexpected error:', sys.exc_info())
     finally:
-        print(err_msg)
+        logging.error(err_msg)
         # print(check_value)
 
 
 if __name__ == '__main__':
-    os.makedirs("../logs", exist_ok=True)
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-                        datefmt='%a, %d %b %Y %H:%M:%S',
-                        filename='../logs/jenkins.log',
-                        filemode='w')
-    config = configparser.ConfigParser()
-    config.read('../config/jenkins.cfg')
-    username = config['test']['username']
-    password =  config['test']['password']
-    jenkins_url =  config['test']['jenkins_url']
-    project = 'merchant-test0-goods-mgt'
+    username = 'jenkins_user@haixue.com'
+    password = 'bftycsow'
+    jenkins_url = 'http://jenkins.highso.com.cn'
     server = jenkins.Jenkins(jenkins_url, username=username, password=password)
-    # json_data = job_status('auto-infra-apihome-service')
-    # write_es("192.168.16.172:9200", json_data)
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(filename)s %(levelname)s %(message)s',
+                        datefmt='%a, %d %b %Y %H:%M:%S',
+                        filename='logs/jenkins.log_{}'.format(
+                            datetime.strftime(datetime.now(), '%Y-%m-%d')),
+                        filemode='w')
+    #json_data = job_status('auto-infra-apihome-service')
+    #write_es("192.168.16.213:9205", json_data)
     for k, v in job_list().items():
-        print("****" + k)
+        logging.info("开始抓取 {}".format(k))
         es_json = job_status(k)
-        if es_json:
-            write_es("192.168.16.172:9200", es_json)
+        print(es_json)
+        # if es_json:
+        #     #print(es_json)
+        #     write_es("192.168.16.213:9205", es_json)
     # #print(job_list())
     # print(job_status("api-reg-jjxt-app-api"))
-

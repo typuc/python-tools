@@ -42,7 +42,7 @@ def es_search():
     end_time = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S+0800')
     start_time = (datetime.datetime.now() - datetime.timedelta(minutes=interval)).strftime('%Y-%m-%dT%H:%M:%S+0800')
     query_text = '其它呼叫外线错误'
-    error_word = ['其它呼叫外线错误', '中通连接失败']
+    error_word = ['中通连接失败']
     # 林晓东
     mobile = ['18683875959']
     es_host = '192.168.16.213:9205'
